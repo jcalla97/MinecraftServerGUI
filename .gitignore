@@ -1,2 +1,5 @@
 *.csproj*
 /Server
+/obj
+/bin
+Ideas-Bugs.txt
