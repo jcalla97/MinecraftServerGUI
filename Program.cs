@@ -11,13 +11,9 @@ namespace MinecraftServerCSharp
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new mainWindow());
-            shutdown();
-        }
-
-        private static void shutdown()
-        {
-            return;
+            mainWindow app = new mainWindow();
+            Application.Run(app);
+            app.Shutdown();
         }
     }
 }
