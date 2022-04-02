@@ -55,7 +55,7 @@ namespace MinecraftServerCSharp
         private Controller load_controller(string name)
         {
             typeName = "MinecraftServerCSharp." + name + ".Controller";
-            object?[] args = new object?[] { this.projectDirectory };
+            object?[] args = new object?[] { this.projectDirectory, this };
             Type type = Type.GetType(typeName);
             Assembly assem = type.Assembly;
             Controller control = (Controller)assem.CreateInstance(typeName, true, BindingFlags.Default, null, args:args, null, null);

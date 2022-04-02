@@ -16,15 +16,21 @@ namespace MinecraftServerCSharp.Server_tab
     public partial class gui_ui : Form
     {
         private bool running;
+        private bool newWorldOpen;
+        private bool init = false;
+        private Form parent;
+        private NewWorldForm newWorldForm;
         private string javaHome = "C:\\Program Files\\Java\\jdk-17.0.2\\bin\\java.exe";
         private Process server;
         private string projectDirectory = "";
         public TabPage tab;
-        public gui_ui(string pd)
+        public gui_ui(string pd, Form parent)
         {
             // Setup variables
             this.running = false;
             this.projectDirectory = pd;
+            this.newWorldOpen = false;
+            this.parent = parent;
             
             //Initialize tab
             tab = InitializeComponent();
@@ -65,8 +71,43 @@ namespace MinecraftServerCSharp.Server_tab
             }
         }
 
+        private void RunServer()
+        // Actually runs the sever
+        {
+            try
+            {
+                this.server.StartInfo.FileName = this.javaHome;
+                this.server.StartInfo.RedirectStandardInput = true;
+                this.server.StartInfo.RedirectStandardOutput = true;
+                this.server.StartInfo.RedirectStandardError = true;
+                this.server.StartInfo.CreateNoWindow = true;
+                this.server.StartInfo.WorkingDirectory = this.projectDirectory + "\\Server";
+                this.server.StartInfo.Arguments = "-Xmx3G -Xms1G -jar server.jar nogui";
+                this.server.OutputDataReceived += outputDataReceived;
+                this.server.Start();
+                this.server.BeginOutputReadLine();
+                this.server.BeginErrorReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e);
+            }
+        }
+
+        private void RestartButtonClick(object sender, EventArgs e)
+        // Restart the server
+        {
+            ConsoleWriter("=====================================");
+            ConsoleWriter("=========== Restarting the Server ===========");
+            ConsoleWriter("=====================================");
+            this.server.StandardInput.WriteLine("stop");
+            Thread.Sleep(10);
+            this.server.Close();
+            this.server = new Process();
+            RunServer();
+        }
         //
-        //
+        // Console Writers
         //
         public void ConsoleWriter(string value)
         // Adds text to consoleLog on Server tab
@@ -78,61 +119,23 @@ namespace MinecraftServerCSharp.Server_tab
             }
             this.consoleLog.AppendText(value + "\n");
         }
-
-        private void RunServer()
-        {
-            try
-            {
-                this.server.StartInfo.FileName = this.javaHome;
-                this.server.StartInfo.RedirectStandardInput = true;
-                this.server.StartInfo.RedirectStandardOutput = true;
-                this.server.StartInfo.RedirectStandardError = true;
-                this.server.StartInfo.CreateNoWindow = true;
-                this.server.StartInfo.WorkingDirectory = this.projectDirectory + "\\Server";
-                this.server.StartInfo.Arguments = "-Xmx3G -Xms1G -jar server.jar nogui";
-                this.server.OutputDataReceived += ConsoleWriter;
-                this.server.Start();
-                this.server.BeginOutputReadLine();
-                this.server.BeginErrorReadLine();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + e);
-            }
-        }
-
-        private void ConsoleWriter(object sendingProcess, DataReceivedEventArgs outLine)
+        // Process OutputDataReceived ConsoleWriter;
+        private void outputDataReceived(object sendingProcess, DataReceivedEventArgs outLine)
         {
             if (!String.IsNullOrEmpty(outLine.Data))
             {
                 ConsoleWriter(outLine.Data);
             }
         }
-
-        private void ServerExit(object sendingProcess, EventArgs e)
-        {
-            ConsoleWriter("Server has exited on its own!");
-            this.server.Kill();
-            this.server = new Process();
-            this.running = false;
-            this.startButton.Text = "Start";
-        }
-
-        private void RestartButtonClick(object sender, EventArgs e)
-        {
-            ConsoleWriter("=====================================");
-            ConsoleWriter("=========== Restarting the Server ===========");
-            ConsoleWriter("=====================================");
-            this.server.StandardInput.WriteLine("stop");
-            Thread.Sleep(10);
-            this.server.Close();
-            this.server = new Process();
-            RunServer();
-        }
-
+       //
+       // Worlds  Combo Box
+       //
         private void InitWorldCombobox()
         {
             string[] directories = Directory.GetDirectories(projectDirectory + "\\Server\\worlds");
+            this.worldCombobox.Items.Clear();
+            this.worldCombobox.Items.Add("<New>");
+            init = true;
             for (int i = 0; i < directories.Length; i++)
             {
                 string[] dir_list = directories[i].Split("\\");
@@ -142,9 +145,60 @@ namespace MinecraftServerCSharp.Server_tab
             this.worldCombobox.SelectedIndex = 0;
         }
 
-        private void backup(ElapsedEventHandler e)
+       private void ComboBoxChange(object sender, EventArgs args)
+        {
+            if (init)
+            {
+                init = false;
+                return;
+            }
+            if (this.worldCombobox.SelectedItem.ToString() == "<New>")
+            {
+                this.NewWorld();
+                return;
+            }
+        }
+        //
+        // New World Form Window
+        //
+        private void NewWorld()
+        {
+            this.newWorldOpen = true;
+            string[] world_names = new string[this.worldCombobox.Items.Count];
+            for (int i = 0; i < this.worldCombobox.Items.Count; i++)
+            {
+                world_names.Append(this.worldCombobox.GetItemText(worldCombobox.Items[i]));
+            }
+            this.newWorldForm = new NewWorldForm(projectDirectory, world_names);
+            this.newWorldForm.Show();
+            this.newWorldForm.FormClosing += NewWorldFormClosing;
+            this.parent.Enabled = false;
+            this.serverTab.Enabled = false;
+        }
+
+        private void NewWorldFormClosing(object sender, EventArgs args)
+        {
+            this.parent.Enabled = true;
+            this.serverTab.Enabled = true;
+            this.newWorldOpen = false;
+        }
+        //
+        // Server Commands
+        //
+        void backup(ElapsedEventHandler e)
         {
             return;
+        }
+        //
+        // Server Close
+        //
+        private void ServerExit(object sendingProcess, EventArgs e)
+        {
+            ConsoleWriter("Server has exited on its own!");
+            this.server.Kill();
+            this.server = new Process();
+            this.running = false;
+            this.startButton.Text = "Start";
         }
 
         public void Shutdown()
@@ -158,16 +212,20 @@ namespace MinecraftServerCSharp.Server_tab
                 Thread.Sleep(10);
                 this.server.Close();
             }
+            if (this.newWorldOpen)
+            {
+                newWorldForm.Close();
+            }
         }
     }
 
 
     internal class Gui : common.View
     {
-        public Gui(string projectDirectory)
+        public Gui(string projectDirectory, Form parent)
         {
             this.projectDirectory = projectDirectory;
-            gui_ui gui = new gui_ui(projectDirectory);
+            gui_ui gui = new gui_ui(projectDirectory, parent);
             this.tab = gui.tab;
         }
     }

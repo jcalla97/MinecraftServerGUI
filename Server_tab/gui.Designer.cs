@@ -61,6 +61,7 @@
             this.worldCombobox.Name = "worldCombobox";
             this.worldCombobox.Size = new System.Drawing.Size(121, 23);
             this.worldCombobox.TabIndex = 2;
+            this.worldCombobox.SelectedIndexChanged += new System.EventHandler(this.ComboBoxChange);
             // 
             // restartButton
             // 
