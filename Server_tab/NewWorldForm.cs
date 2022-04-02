@@ -28,6 +28,7 @@ namespace MinecraftServerCSharp.Server_tab
             this.sp_path = pd + "\\Server\\server.properties";
             this.world_path = pd + "\\Server\\worlds";
             InitializeComponent();
+            initDifficultyCombobox();
             cfg = readCFG(sp_path);
         }
         public void NewWorldForm_FormClosing(object sender, EventArgs args)
@@ -100,7 +101,16 @@ namespace MinecraftServerCSharp.Server_tab
         //
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            cfg[difficulty] = "difficulty=" + this.comboBox1.Text;
+            return;
+        }
+        private void initDifficultyCombobox()
+        {
+            string[] diff = {"easy", "medium", "hard", "peaceful"};
+            foreach (string d in diff)
+            {
+                this.comboBox1.Items.Add(d);
+            }
         }
         //
         // CFG methods
