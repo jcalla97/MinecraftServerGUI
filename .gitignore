@@ -1,5 +1,5 @@
 *.csproj*
 /Server
-/obj
-/bin
+/obj/*
+/bin/*
 Ideas-Bugs.txt
