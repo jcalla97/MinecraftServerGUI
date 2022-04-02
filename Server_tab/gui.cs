@@ -167,7 +167,8 @@ namespace MinecraftServerCSharp.Server_tab
             string[] world_names = new string[this.worldCombobox.Items.Count];
             for (int i = 0; i < this.worldCombobox.Items.Count; i++)
             {
-                world_names.Append(this.worldCombobox.GetItemText(worldCombobox.Items[i]));
+                string item = this.worldCombobox.GetItemText(worldCombobox.Items[i]);
+                world_names[i] = item;
             }
             this.newWorldForm = new NewWorldForm(projectDirectory, world_names);
             this.newWorldForm.Show();
@@ -181,6 +182,7 @@ namespace MinecraftServerCSharp.Server_tab
             this.parent.Enabled = true;
             this.serverTab.Enabled = true;
             this.newWorldOpen = false;
+            this.InitWorldCombobox();
         }
         //
         // Server Commands

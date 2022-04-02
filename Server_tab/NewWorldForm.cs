@@ -15,6 +15,7 @@ namespace MinecraftServerCSharp.Server_tab
     {
         public string[] cfg;
         private string sp_path;
+        private string world_path;
         private string[] world_names;
         private int difficulty;
         private int seed;
@@ -25,6 +26,7 @@ namespace MinecraftServerCSharp.Server_tab
         {
             this.world_names = worlds;
             this.sp_path = pd + "\\Server\\server.properties";
+            this.world_path = pd + "\\Server\\worlds";
             InitializeComponent();
             cfg = readCFG(sp_path);
         }
@@ -155,7 +157,19 @@ namespace MinecraftServerCSharp.Server_tab
             {
                 return;
             }
-            //else if (this.nameTextbox.Text is in )
+            else
+            {
+                foreach (string world in world_names)
+                {
+                    if (this.nameTextbox.Text == world)
+                    {
+                        return;
+                    }
+                }
+            }
+            string new_dir = Path.Combine(this.world_path, this.nameTextbox.Text);
+            Directory.CreateDirectory(new_dir);
+            
             File.WriteAllLines(sp_path, cfg);
             this.Close();
         }
