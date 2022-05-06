@@ -99,9 +99,9 @@ namespace MinecraftServerCSharp.Server_tab
         //
         // Combobox
         //
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void difficultyCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cfg[difficulty] = "difficulty=" + this.comboBox1.Text;
+            cfg[difficulty] = "difficulty=" + this.difficultyCombobox.Text;
             return;
         }
         private void initDifficultyCombobox()
@@ -109,7 +109,7 @@ namespace MinecraftServerCSharp.Server_tab
             string[] diff = {"easy", "medium", "hard", "peaceful"};
             foreach (string d in diff)
             {
-                this.comboBox1.Items.Add(d);
+                this.difficultyCombobox.Items.Add(d);
             }
         }
         //
@@ -179,10 +179,21 @@ namespace MinecraftServerCSharp.Server_tab
             }
             string new_dir = Path.Combine(this.world_path, this.nameTextbox.Text);
             Directory.CreateDirectory(new_dir);
-            
             File.WriteAllLines(sp_path, cfg);
+            File.Copy(sp_path, new_dir + "\\server.properties", true);
             this.Close();
         }
 
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            string message = "Are you sure you wan't to close out of the world creator? You will lose all data.";
+            string title = "Warning!";
+            MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
+            DialogResult result = MessageBox.Show(message, title, buttons);
+            if (result == DialogResult.OK)
+            {
+                this.Close();
+            }
+        }
     }
 }

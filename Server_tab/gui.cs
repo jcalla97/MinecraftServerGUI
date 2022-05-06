@@ -33,8 +33,8 @@ namespace MinecraftServerCSharp.Server_tab
             this.parent = parent;
             
             //Initialize tab
-            tab = InitializeComponent();
-
+            InitializeComponent();
+            tab = this.serverTab;
             // Setup buttons
             this.restartButton.Enabled = false;
             InitWorldCombobox();

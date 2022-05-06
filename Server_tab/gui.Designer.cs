@@ -26,21 +26,25 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private TabPage InitializeComponent()
+        private void InitializeComponent()
         {
             this.serverGroupBox = new System.Windows.Forms.GroupBox();
             this.worldCombobox = new System.Windows.Forms.ComboBox();
             this.restartButton = new System.Windows.Forms.Button();
             this.startButton = new System.Windows.Forms.Button();
+            this.tabController = new System.Windows.Forms.TabControl();
             this.serverTab = new System.Windows.Forms.TabPage();
             this.consoleLog = new System.Windows.Forms.RichTextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.serverGroupBox.SuspendLayout();
+            this.tabController.SuspendLayout();
             this.serverTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // serverGroupBox
             // 
             this.serverGroupBox.AutoSize = true;
+            this.serverGroupBox.Controls.Add(this.button1);
             this.serverGroupBox.Controls.Add(this.worldCombobox);
             this.serverGroupBox.Controls.Add(this.restartButton);
             this.serverGroupBox.Controls.Add(this.startButton);
@@ -73,6 +77,7 @@
             this.restartButton.TabIndex = 1;
             this.restartButton.Text = "Restart";
             this.restartButton.UseVisualStyleBackColor = true;
+            this.restartButton.Click += new System.EventHandler(this.RestartButtonClick);
             // 
             // startButton
             // 
@@ -84,6 +89,16 @@
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.StartButton_Click);
+            // 
+            // tabController
+            // 
+            this.tabController.Controls.Add(this.serverTab);
+            this.tabController.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabController.Location = new System.Drawing.Point(0, 0);
+            this.tabController.Name = "tabController";
+            this.tabController.SelectedIndex = 0;
+            this.tabController.Size = new System.Drawing.Size(993, 878);
+            this.tabController.TabIndex = 1;
             // 
             // serverTab
             // 
@@ -105,8 +120,31 @@
             this.consoleLog.Size = new System.Drawing.Size(979, 775);
             this.consoleLog.TabIndex = 1;
             this.consoleLog.Text = "";
-            // Return the Tab page
-            return this.serverTab;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(583, 40);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // gui_ui
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(993, 878);
+            this.Controls.Add(this.tabController);
+            this.Name = "gui_ui";
+            this.Text = "Minecraft Server";
+            this.serverGroupBox.ResumeLayout(false);
+            this.serverGroupBox.PerformLayout();
+            this.tabController.ResumeLayout(false);
+            this.serverTab.ResumeLayout(false);
+            this.serverTab.PerformLayout();
+            this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -114,8 +152,10 @@
         private GroupBox serverGroupBox;
         private Button startButton;
         private TabPage serverTab;
+        private TabControl tabController;
         private Button restartButton;
         private ComboBox worldCombobox;
         private RichTextBox consoleLog;
+        private Button button1;
     }
 }

@@ -37,16 +37,16 @@
             this.verifyLabel = new System.Windows.Forms.Label();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
+            this.resourcepackTextbox = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.difficultyLabel = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.difficultyCombobox = new System.Windows.Forms.ComboBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.seedLabel = new System.Windows.Forms.Label();
             this.seedTextbox = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.nameLabel = new System.Windows.Forms.Label();
             this.nameTextbox = new System.Windows.Forms.TextBox();
-            this.resourcepackTextbox = new System.Windows.Forms.TextBox();
             this.newWorldGroupbox.SuspendLayout();
             this.flowLayoutPanel6.SuspendLayout();
             this.flowLayoutPanel5.SuspendLayout();
@@ -110,6 +110,7 @@
             this.cancelButton.TabIndex = 6;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // flowLayoutPanel5
             // 
@@ -170,10 +171,20 @@
             this.label1.Text = "Resource Pack URL";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // resourcepackTextbox
+            // 
+            this.resourcepackTextbox.Location = new System.Drawing.Point(119, 6);
+            this.resourcepackTextbox.MaximumSize = new System.Drawing.Size(200, 20);
+            this.resourcepackTextbox.MinimumSize = new System.Drawing.Size(200, 20);
+            this.resourcepackTextbox.Name = "resourcepackTextbox";
+            this.resourcepackTextbox.Size = new System.Drawing.Size(200, 20);
+            this.resourcepackTextbox.TabIndex = 2;
+            this.resourcepackTextbox.TextChanged += new System.EventHandler(this.resourcepackTextbox_TextChanged);
+            // 
             // flowLayoutPanel3
             // 
             this.flowLayoutPanel3.Controls.Add(this.difficultyLabel);
-            this.flowLayoutPanel3.Controls.Add(this.comboBox1);
+            this.flowLayoutPanel3.Controls.Add(this.difficultyCombobox);
             this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 79);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(3, 3, 3, 20);
@@ -196,16 +207,16 @@
             this.difficultyLabel.Text = "Difficulty";
             this.difficultyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // comboBox1
+            // difficultyCombobox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(119, 6);
-            this.comboBox1.MaximumSize = new System.Drawing.Size(200, 0);
-            this.comboBox1.MinimumSize = new System.Drawing.Size(200, 0);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(200, 23);
-            this.comboBox1.TabIndex = 1;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.difficultyCombobox.FormattingEnabled = true;
+            this.difficultyCombobox.Location = new System.Drawing.Point(119, 6);
+            this.difficultyCombobox.MaximumSize = new System.Drawing.Size(200, 0);
+            this.difficultyCombobox.MinimumSize = new System.Drawing.Size(200, 0);
+            this.difficultyCombobox.Name = "difficultyCombobox";
+            this.difficultyCombobox.Size = new System.Drawing.Size(200, 23);
+            this.difficultyCombobox.TabIndex = 1;
+            this.difficultyCombobox.SelectedIndexChanged += new System.EventHandler(this.difficultyCombobox_SelectedIndexChanged);
             // 
             // flowLayoutPanel2
             // 
@@ -275,16 +286,6 @@
             this.nameTextbox.TabIndex = 1;
             this.nameTextbox.TextChanged += new System.EventHandler(this.nameTextbox_TextChanged);
             // 
-            // resourcepackTextbox
-            // 
-            this.resourcepackTextbox.Location = new System.Drawing.Point(119, 6);
-            this.resourcepackTextbox.MaximumSize = new System.Drawing.Size(200, 20);
-            this.resourcepackTextbox.MinimumSize = new System.Drawing.Size(200, 20);
-            this.resourcepackTextbox.Name = "resourcepackTextbox";
-            this.resourcepackTextbox.Size = new System.Drawing.Size(200, 20);
-            this.resourcepackTextbox.TabIndex = 2;
-            this.resourcepackTextbox.TextChanged += new System.EventHandler(this.resourcepackTextbox_TextChanged);
-            // 
             // NewWorldForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -331,7 +332,7 @@
         private FlowLayoutPanel flowLayoutPanel4;
         private Label label1;
         private TextBox resourcepackTextbox;
-        private ComboBox comboBox1;
+        private ComboBox difficultyCombobox;
         private Label verifyLabel;
         private FlowLayoutPanel flowLayoutPanel6;
         private Button createWorldButton;
