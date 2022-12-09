@@ -14,8 +14,7 @@ namespace MinecraftServerCSharp
         public mainWindow()
         {
             // Retrieve working directory
-            string workingDirectory = Environment.CurrentDirectory;
-            projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+            workingDirectory = Environment.CurrentDirectory;
 
             // Initialize window
             InitializeComponent();
@@ -23,7 +22,7 @@ namespace MinecraftServerCSharp
             // Instantiate Controllers
             string @namespace = "MinecraftServerCSharp";
             string @class = "Controller";
-            string[] directories = Directory.GetDirectories(projectDirectory);
+            string[] directories = Directory.GetDirectories(workingDirectory);
 
             foreach (string dir in directories)
             {
@@ -55,7 +54,7 @@ namespace MinecraftServerCSharp
         private Controller load_controller(string name)
         {
             typeName = "MinecraftServerCSharp." + name + ".Controller";
-            object?[] args = new object?[] { this.projectDirectory, this };
+            object?[] args = new object?[] { workingDirectory, this };
             Type type = Type.GetType(typeName);
             Assembly assem = type.Assembly;
             Controller control = (Controller)assem.CreateInstance(typeName, true, BindingFlags.Default, null, args:args, null, null);
@@ -70,7 +69,7 @@ namespace MinecraftServerCSharp
             }
         }
 
-        private string projectDirectory;
+        private string workingDirectory;
         Dictionary<string, object> controllers = new Dictionary<string, object>();
     }
 }
