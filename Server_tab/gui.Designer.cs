@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.serverGroupBox = new System.Windows.Forms.GroupBox();
+            this.deleteWorldButton = new System.Windows.Forms.Button();
             this.worldCombobox = new System.Windows.Forms.ComboBox();
             this.restartButton = new System.Windows.Forms.Button();
             this.startButton = new System.Windows.Forms.Button();
             this.tabController = new System.Windows.Forms.TabControl();
             this.serverTab = new System.Windows.Forms.TabPage();
             this.consoleLog = new System.Windows.Forms.RichTextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.serverGroupBox.SuspendLayout();
             this.tabController.SuspendLayout();
             this.serverTab.SuspendLayout();
@@ -44,24 +44,39 @@
             // serverGroupBox
             // 
             this.serverGroupBox.AutoSize = true;
-            this.serverGroupBox.Controls.Add(this.button1);
+            this.serverGroupBox.Controls.Add(this.deleteWorldButton);
             this.serverGroupBox.Controls.Add(this.worldCombobox);
             this.serverGroupBox.Controls.Add(this.restartButton);
             this.serverGroupBox.Controls.Add(this.startButton);
             this.serverGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.serverGroupBox.Location = new System.Drawing.Point(3, 3);
-            this.serverGroupBox.MinimumSize = new System.Drawing.Size(0, 50);
+            this.serverGroupBox.MinimumSize = new System.Drawing.Size(0, 75);
             this.serverGroupBox.Name = "serverGroupBox";
-            this.serverGroupBox.Size = new System.Drawing.Size(979, 69);
+            this.serverGroupBox.Padding = new System.Windows.Forms.Padding(3, 14, 3, 3);
+            this.serverGroupBox.Size = new System.Drawing.Size(996, 75);
             this.serverGroupBox.TabIndex = 0;
             this.serverGroupBox.TabStop = false;
             this.serverGroupBox.Text = "Server";
+            // 
+            // deleteWorldButton
+            // 
+            this.deleteWorldButton.AutoSize = true;
+            this.deleteWorldButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.deleteWorldButton.Location = new System.Drawing.Point(787, 30);
+            this.deleteWorldButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
+            this.deleteWorldButton.MaximumSize = new System.Drawing.Size(85, 25);
+            this.deleteWorldButton.MinimumSize = new System.Drawing.Size(85, 25);
+            this.deleteWorldButton.Name = "deleteWorldButton";
+            this.deleteWorldButton.Size = new System.Drawing.Size(85, 25);
+            this.deleteWorldButton.TabIndex = 3;
+            this.deleteWorldButton.Text = "Delete World";
+            this.deleteWorldButton.UseVisualStyleBackColor = true;
             // 
             // worldCombobox
             // 
             this.worldCombobox.Dock = System.Windows.Forms.DockStyle.Right;
             this.worldCombobox.FormattingEnabled = true;
-            this.worldCombobox.Location = new System.Drawing.Point(855, 19);
+            this.worldCombobox.Location = new System.Drawing.Point(872, 30);
             this.worldCombobox.Name = "worldCombobox";
             this.worldCombobox.Size = new System.Drawing.Size(121, 23);
             this.worldCombobox.TabIndex = 2;
@@ -69,7 +84,9 @@
             // 
             // restartButton
             // 
-            this.restartButton.Location = new System.Drawing.Point(87, 22);
+            this.restartButton.AutoSize = true;
+            this.restartButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.restartButton.Location = new System.Drawing.Point(78, 30);
             this.restartButton.MaximumSize = new System.Drawing.Size(75, 25);
             this.restartButton.MinimumSize = new System.Drawing.Size(75, 25);
             this.restartButton.Name = "restartButton";
@@ -82,7 +99,10 @@
             // startButton
             // 
             this.startButton.AutoSize = true;
-            this.startButton.Location = new System.Drawing.Point(6, 22);
+            this.startButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.startButton.Location = new System.Drawing.Point(3, 30);
+            this.startButton.MaximumSize = new System.Drawing.Size(75, 25);
+            this.startButton.MinimumSize = new System.Drawing.Size(75, 25);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 25);
             this.startButton.TabIndex = 0;
@@ -97,7 +117,7 @@
             this.tabController.Location = new System.Drawing.Point(0, 0);
             this.tabController.Name = "tabController";
             this.tabController.SelectedIndex = 0;
-            this.tabController.Size = new System.Drawing.Size(993, 878);
+            this.tabController.Size = new System.Drawing.Size(1010, 1047);
             this.tabController.TabIndex = 1;
             // 
             // serverTab
@@ -107,7 +127,7 @@
             this.serverTab.Location = new System.Drawing.Point(4, 24);
             this.serverTab.Name = "serverTab";
             this.serverTab.Padding = new System.Windows.Forms.Padding(3);
-            this.serverTab.Size = new System.Drawing.Size(985, 850);
+            this.serverTab.Size = new System.Drawing.Size(1002, 1019);
             this.serverTab.TabIndex = 0;
             this.serverTab.Text = "Server";
             this.serverTab.UseVisualStyleBackColor = true;
@@ -115,26 +135,17 @@
             // consoleLog
             // 
             this.consoleLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.consoleLog.Location = new System.Drawing.Point(3, 72);
+            this.consoleLog.Location = new System.Drawing.Point(3, 78);
             this.consoleLog.Name = "consoleLog";
-            this.consoleLog.Size = new System.Drawing.Size(979, 775);
+            this.consoleLog.Size = new System.Drawing.Size(996, 938);
             this.consoleLog.TabIndex = 1;
             this.consoleLog.Text = "";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(583, 40);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // gui_ui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(993, 878);
+            this.ClientSize = new System.Drawing.Size(1010, 1047);
             this.Controls.Add(this.tabController);
             this.Name = "gui_ui";
             this.Text = "Minecraft Server";
@@ -156,6 +167,6 @@
         private Button restartButton;
         private ComboBox worldCombobox;
         private RichTextBox consoleLog;
-        private Button button1;
+        private Button deleteWorldButton;
     }
 }
