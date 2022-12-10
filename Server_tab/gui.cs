@@ -13,35 +13,64 @@ using System.Diagnostics;
 
 namespace MinecraftServerCSharp.Server_tab
 {
-    public partial class gui_ui : Form
+    public partial class ServerTabUI : Form
     {
-        private bool running;
-        private bool newWorldOpen;
-        private bool init = false;
-        private Form parent;
-        private NewWorldForm newWorldForm;
-        private string javaHome = "C:\\Program Files\\Java\\jdk-17.0.2\\bin\\java.exe";
-        private Process server;
-        private string projectDirectory = "";
-        public TabPage tab;
-        public gui_ui(string pd, Form parent)
+        public ServerTabUI(string pd, Form parent)
         {
             // Setup variables
-            this.running = false;
-            this.projectDirectory = pd;
-            this.newWorldOpen = false;
+            running = false;
+            projectDirectory = pd;
+            worldsDir = projectDirectory + "\\Server\\worlds\\";
+            cfgPath = projectDirectory + "\\Server\\server.properties";
+            newWorldOpen = false;
             this.parent = parent;
-            
+            cfg = File.ReadAllLines(cfgPath);
             //Initialize tab
             InitializeComponent();
-            tab = this.serverTab;
+            tab = serverTab;
             // Setup buttons
-            this.restartButton.Enabled = false;
+            restartButton.Enabled = false;
             InitWorldCombobox();
+            InitWorldInfoTable();
         }
-        //
-        // Server Start
-        //
+        /// <summary>
+        /// Server Initialization Functions
+        /// </summary>
+        private void writeConfig()
+        {
+            foreach (KeyValuePair<string, (string, int)> conf in serverProperties){
+                cfg[conf.Value.Item2] = conf.Key + "=" + conf.Value.Item1;
+            }
+            File.WriteAllLines(cfgPath, cfg);
+            File.Copy(cfgPath, worldsDir + worldCombobox.Text + "\\server.properties", true);
+        }
+        private void InitWorldInfoTable()
+        {
+            int index = 0;
+            int row = 0;
+            foreach (string line in cfg)
+            {
+                string[] split = line.Split('=');
+                if (serverProperties.ContainsKey(split[0]))
+                {
+                    serverProperties[split[0]] = (split[1], index);
+                    Label name = new Label();
+                    name.Text = split[0];
+                    Label value = new Label();
+                    value.Text = split[1];
+                    row++;
+                }
+                index++;
+            }
+            return;
+        }
+        private void setServerControlsEnabled(bool val)
+        {
+            startButton.Enabled = val;
+        }
+        /// <summary>
+        /// Server Start
+        /// </summary>
         private void StartButton_Click(object sender, EventArgs e)
         // Event handler for when the Start/Stop button is pressed
         {
@@ -70,7 +99,6 @@ namespace MinecraftServerCSharp.Server_tab
                 this.restartButton.Enabled = true;
             }
         }
-
         private void RunServer()
         // Actually runs the sever
         {
@@ -124,38 +152,88 @@ namespace MinecraftServerCSharp.Server_tab
         {
             if (!String.IsNullOrEmpty(outLine.Data))
             {
-                ConsoleWriter(outLine.Data);
+                ServerOutput(outLine.Data);
             }
+        }
+        private void ServerOutput(string s)
+        {
+            this.Invoke(new Action<string>(ConsoleWriter), new object[] { s });
         }
        //
        // Worlds  Combo Box
        //
         private void InitWorldCombobox()
         {
-            string[] directories = Directory.GetDirectories(projectDirectory + "\\Server\\worlds");
-            this.worldCombobox.Items.Clear();
-            this.worldCombobox.Items.Add("<New>");
-            init = true;
-            for (int i = 0; i < directories.Length; i++)
+            try
             {
-                string[] dir_list = directories[i].Split("\\");
-                string dir = dir_list[dir_list.Length - 1];
-                this.worldCombobox.Items.Add(dir);
-            }
-            this.worldCombobox.SelectedIndex = 0;
+                string[] directories = Directory.GetDirectories(worldsDir);
+                this.worldCombobox.Items.Clear();
+                this.worldCombobox.Items.Add("<New>");
+                init = true;
+                for (int i = 0; i < directories.Length; i++)
+                {
+                    string[] dir_list = directories[i].Split("\\");
+                    string dir = dir_list[dir_list.Length - 1];
+                    if (dir == "worlds")
+                    {
+                        continue;
+                    }
+                    this.worldCombobox.Items.Add(dir);
+                }
+                this.worldCombobox.SelectedIndex = 0;
+            } catch (DirectoryNotFoundException e)
+            {
+                ConsoleWriter("Please create a world and run a server to initialize certain files.");
+            } 
         }
 
        private void ComboBoxChange(object sender, EventArgs args)
-        {
+       {
             if (init)
             {
                 init = false;
                 return;
             }
-            if (this.worldCombobox.SelectedItem.ToString() == "<New>")
+            string world = worldCombobox.SelectedItem.ToString();
+            if (world == "<New>")
             {
                 this.NewWorld();
                 return;
+            }
+            // TODO:: Copy server.properties
+            string wsp = projectDirectory + "\\Server\\worlds\\";
+            string sp = projectDirectory + "\\Server\\server.properties";
+            try { File.Copy(wsp, sp); } 
+            catch { 
+                ConsoleWriter("Failed to copy server.properties");
+                setServerControlsEnabled(false);
+                worldCombobox.SelectedIndex = 0;
+            }
+        }
+        private void DeleteWorldClick(object sender, EventArgs args)
+        {
+            int currentIndex = worldCombobox.SelectedIndex;
+            string world = worldCombobox.Text;
+            string worldPath = worldsDir + world;
+            string msg = "Are you sure you want to delete the save data of " + world + 
+                "? You will not be able recover the world!";
+            string title = "Delete World?";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            var result = MessageBox.Show(msg, title, buttons, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    Directory.Delete(worldPath, true);
+                    worldCombobox.Items.Remove(worldCombobox.Items[currentIndex]);
+                    worldCombobox.SelectedIndex = 0;
+                    setServerControlsEnabled(false);
+                    writeConfig();
+                }
+                catch (Exception e)
+                {
+                    var ex = e.Data;
+                }
             }
         }
         //
@@ -221,13 +299,12 @@ namespace MinecraftServerCSharp.Server_tab
         }
     }
 
-
     internal class Gui : common.View
     {
         public Gui(string projectDirectory, Form parent)
         {
             this.projectDirectory = projectDirectory;
-            gui_ui gui = new gui_ui(projectDirectory, parent);
+            ServerTabUI gui = new ServerTabUI(projectDirectory, parent);
             this.tab = gui.tab;
         }
     }
