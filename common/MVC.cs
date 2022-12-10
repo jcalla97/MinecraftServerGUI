@@ -8,7 +8,6 @@ namespace MinecraftServerCSharp.common
 {
     internal class MVC
     {
-
         public Dictionary<string, object?> views = new Dictionary<string, object?>();
         public Dictionary<string, object?> models = new Dictionary<string, object?>();
         public string projectDirectory = "";
