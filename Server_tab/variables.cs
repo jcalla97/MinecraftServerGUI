@@ -1,0 +1,58 @@
+﻿using System.Diagnostics;
+
+namespace MinecraftServerCSharp.Server_tab
+{
+    public partial class ServerTabUI
+    {
+        private bool running;
+        private bool newWorldOpen;
+        private bool init = false;
+        private Form parent;
+        private NewWorldForm newWorldForm;
+        private string javaHome = "C:\\Program Files\\Java\\jdk-17.0.2\\bin\\java.exe";
+        private Process server;
+        private string projectDirectory = string.Empty;
+        private string cfgPath = string.Empty;
+        private string worldsDir;
+        private string[] cfg;
+        public TabPage tab;
+        public Dictionary<string, (string, int)> serverProperties = new Dictionary<string, (string, int)>()
+        {
+            {"difficulty", (string.Empty, 0)},
+            {"enforce-whitelist", (string.Empty, 0)},
+            {"level-seed", (string.Empty, 0) },
+            {"level-name", (string.Empty, 0)},
+            {"max-players", (string.Empty, 0)},
+            {"motd", (string.Empty, 0)},
+            {"online-mode", (string.Empty, 0)},
+            {"player-idle-timeout", (string.Empty, 0)},
+            {"pvp", (string.Empty, 0)},
+            {"require-resource-pack", (string.Empty, 0)},
+            {"resource-pack", (string.Empty, 0)},
+            {"server-ip", (string.Empty, 0)},
+            {"server-port", (string.Empty, 0)},
+            {"spawn-protection", (string.Empty, 0)},
+        };
+        public static string[] checkboxConfigsItems = new string[]
+        {
+            "require-resource-pack",
+            "pvp",
+            "online-mode",
+            "spawn-protection",
+            "enfore-whitelist",
+        };
+        public static string[] dropDownConfigItems = new string[]
+        {
+            "difficulty",
+        };
+        public static string[] textBoxConfigItems = new string[] {
+            "level-seed",
+            "max-players",
+            "motd",
+            "player-idle-timeout",
+            "server-ip",
+            "server-port",
+        };
+    }
+
+}
