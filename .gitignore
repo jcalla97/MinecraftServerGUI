@@ -4,6 +4,7 @@
 /Server/libraries/
 /Server/plugins/
 /Server/versions/
+/Server/logs/
 /Server/.console_history
 /Server/banned-ips.json
 /Server/banned-players.json
