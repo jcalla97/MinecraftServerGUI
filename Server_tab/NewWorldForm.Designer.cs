@@ -209,6 +209,7 @@
             // 
             // difficultyCombobox
             // 
+            this.difficultyCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.difficultyCombobox.FormattingEnabled = true;
             this.difficultyCombobox.Location = new System.Drawing.Point(119, 6);
             this.difficultyCombobox.MaximumSize = new System.Drawing.Size(200, 0);
@@ -216,7 +217,7 @@
             this.difficultyCombobox.Name = "difficultyCombobox";
             this.difficultyCombobox.Size = new System.Drawing.Size(200, 23);
             this.difficultyCombobox.TabIndex = 1;
-            this.difficultyCombobox.SelectedIndexChanged += new System.EventHandler(this.difficultyCombobox_SelectedIndexChanged);
+            this.difficultyCombobox.SelectionChangeCommitted += new System.EventHandler(this.difficultyCombobox_SelectedIndexChanged);
             // 
             // flowLayoutPanel2
             // 
@@ -337,6 +338,5 @@
         private FlowLayoutPanel flowLayoutPanel6;
         private Button createWorldButton;
         private Button cancelButton;
-        private TextBox textBox1;
     }
 }

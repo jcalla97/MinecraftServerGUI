@@ -93,7 +93,6 @@ namespace MinecraftServerCSharp.Server_tab
         private void difficultyCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
             cfg[difficulty] = "difficulty=" + this.difficultyCombobox.Text;
-            return;
         }
         private void initDifficultyCombobox()
         {
@@ -102,13 +101,14 @@ namespace MinecraftServerCSharp.Server_tab
             {
                 this.difficultyCombobox.Items.Add(d);
             }
+            difficultyCombobox.SelectedIndex = 2;
         }
         //
         // CFG methods
         //
         private string[] readCFG(string path)
         {
-            string[] allLines = File.ReadAllLines(path); int i = 0;
+            string[] allLines = File.ReadAllLines(path);
             resetCFG(allLines);
             return allLines;
         }
@@ -154,19 +154,9 @@ namespace MinecraftServerCSharp.Server_tab
 
         private void createWorldButton_Click(object sender, EventArgs e)
         {
-            if (this.nameTextbox.Text == "")
+            if (this.nameTextbox.Text == "" || world_names.Contains(this.nameTextbox.Text))
             {
                 return;
-            }
-            else
-            {
-                foreach (string world in world_names)
-                {
-                    if (this.nameTextbox.Text == world)
-                    {
-                        return;
-                    }
-                }
             }
             string new_dir = Path.Combine(this.world_path, this.nameTextbox.Text);
             Directory.CreateDirectory(new_dir);
@@ -177,7 +167,7 @@ namespace MinecraftServerCSharp.Server_tab
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            string message = "Are you sure you wan't to close out of the world creator? You will lose all data.";
+            string message = "Are you sure you want to close out of the world creator? You will lose all data.";
             string title = "Warning!";
             MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
             DialogResult result = MessageBox.Show(message, title, buttons);
