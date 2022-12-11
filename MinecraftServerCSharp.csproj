@@ -16,4 +16,8 @@
     <Exec Command="XCOPY &quot;$(SolutionDir)MinecraftServerCSharp\Server\&quot; &quot;$(TargetDir)Server\&quot; /S /Y&#xD;&#xA;&#xD;&#xA;XCOPY &quot;$(SolutionDir)MinecraftServerCSharp\Server_tab\&quot; &quot;$(TargetDir)Server_tab\&quot; /S /Y" />
   </Target>
 
+	<Target Name="MyDistClean" AfterTargets="PreBuildEvent">
+		<RemoveDir Directories="$(TargetDir)" />
+	</Target>
+
 </Project>
