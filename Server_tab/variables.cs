@@ -6,14 +6,13 @@ namespace MinecraftServerCSharp.Server_tab
     {
         private bool running;
         private bool newWorldOpen;
-        private bool init = false;
         private Form parent;
         private NewWorldForm newWorldForm;
         private string javaHome = "C:\\Program Files\\Java\\jdk-17.0.2\\bin\\java.exe";
         private Process server;
         private string projectDirectory = string.Empty;
         private string cfgPath = string.Empty;
-        private string worldsDir;
+        private string worldsDir = string.Empty;
         private string[] cfg;
         public TabPage tab;
         public Dictionary<string, (string, int)> serverProperties = new Dictionary<string, (string, int)>()
@@ -33,26 +32,15 @@ namespace MinecraftServerCSharp.Server_tab
             {"server-port", (string.Empty, 0)},
             {"spawn-protection", (string.Empty, 0)},
         };
-        public static string[] checkboxConfigsItems = new string[]
+        Dictionary<string, string> difficultyDict = new Dictionary<string, string>()
         {
-            "require-resource-pack",
-            "pvp",
-            "online-mode",
-            "spawn-protection",
-            "enfore-whitelist",
+                {"Peaceful", "peaceful"},
+                {"Easy", "easy"},
+                {"Normal", "normal"},
+                {"Hard", "hard"},
         };
-        public static string[] dropDownConfigItems = new string[]
-        {
-            "difficulty",
-        };
-        public static string[] textBoxConfigItems = new string[] {
-            "level-seed",
-            "max-players",
-            "motd",
-            "player-idle-timeout",
-            "server-ip",
-            "server-port",
-        };
+        public static Dictionary<string, CheckBox> checkboxConfigsItems;
+        public static Dictionary<string, ComboBox> dropDownConfigItems;
+        public static Dictionary<string, TextBox> textBoxConfigItems; 
     }
-
 }
