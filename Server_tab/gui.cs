@@ -24,56 +24,123 @@ namespace MinecraftServerCSharp.Server_tab
             cfgPath = projectDirectory + "\\Server\\server.properties";
             newWorldOpen = false;
             this.parent = parent;
-            cfg = File.ReadAllLines(cfgPath);
             //Initialize tab
             InitializeComponent();
             tab = serverTab;
+
+            // Setup Dictionaries
+            textBoxConfigItems = new Dictionary<string, TextBox>() {
+                { "server-ip", serverIpTextbox},
+                { "server-port", serverPortTextBox},
+                { "max-players", maxPlayersTextBox},
+                { "player-idle-timeout", playerIdleTextBox},
+                {"spawn-protection", null},
+            };
+            checkboxConfigsItems = new Dictionary<string, CheckBox>()
+            {
+                {"require-resource-pack", null},
+                {"pvp", null},
+                {"online-mode", null},
+                {"enfore-whitelist", null},
+            };
+
             // Setup buttons
             restartButton.Enabled = false;
             InitWorldCombobox();
-            InitWorldInfoTable();
+            InitWorldInfo();
+            motdTextBox.Text = serverProperties["motd"].Item1;
         }
         /// <summary>
         /// Server Initialization Functions
         /// </summary>
-        private void writeConfig()
+        private void writeConfig(string world)
         {
             foreach (KeyValuePair<string, (string, int)> conf in serverProperties){
                 cfg[conf.Value.Item2] = conf.Key + "=" + conf.Value.Item1;
             }
             File.WriteAllLines(cfgPath, cfg);
-            File.Copy(cfgPath, worldsDir + worldCombobox.Text + "\\server.properties", true);
+            File.Copy(worldsDir + world + "\\server.properties", cfgPath, true);
         }
-        private void InitWorldInfoTable()
+        private void InitWorldInfo()
         {
+            cfg = File.ReadAllLines(cfgPath);
             int index = 0;
-            int row = 0;
+            difficultyComboBox.SelectedIndex = 0;
             foreach (string line in cfg)
             {
                 string[] split = line.Split('=');
                 if (serverProperties.ContainsKey(split[0]))
                 {
                     serverProperties[split[0]] = (split[1], index);
-                    Label name = new Label();
-                    name.Text = split[0];
-                    Label value = new Label();
-                    value.Text = split[1];
-                    row++;
+                    if (textBoxConfigItems.ContainsKey(split[0]))
+                    {
+                        if (textBoxConfigItems[split[0]] != null)
+                        {
+                            var textbox = textBoxConfigItems[split[0]];
+                            textbox.Text = split[1];
+                        }
+                    }
+                    if (checkboxConfigsItems.ContainsKey(split[0]))
+                    {
+                        if (checkboxConfigsItems[split[0]] != null)
+                        {
+                            var checkBox = checkboxConfigsItems[split[0]];
+                            checkBox.Checked = bool.Parse(split[1]);
+                        }
+                    }
+                    if (split[0] == "difficulty")
+                    {
+                        if (split[1] == "peaceful")
+                        {
+                            difficultyComboBox.SelectedIndex=0;
+                        }
+                        else if (split[1] == "easy")
+                        {
+                            difficultyComboBox.SelectedIndex = 1;
+                        }
+                        else if (split[1] == "normal")
+                        {
+                            difficultyComboBox.SelectedIndex = 2;
+                        }
+                        else if (split[1] == "hard")
+                        {
+                            difficultyComboBox.SelectedIndex = 3;
+                        }
+                    }
                 }
                 index++;
             }
             return;
         }
+
+        private void wolrdInfoTextChange(object sender, EventArgs e)
+        {
+            return;
+        }
+
         private void setServerControlsEnabled(bool val)
         {
             startButton.Enabled = val;
         }
+        
+        private void difficultyComboBoxChange(object sender, EventArgs args)
+        {
+            string difficulty = difficultyComboBox.Text;
+            serverProperties["difficulty"] = (difficultyDict[difficulty], serverProperties["difficulty"].Item2);
+            writeConfig(worldCombobox.Text);
+            ConsoleWriter("Difficulty set to " + difficulty);
+        }
         /// <summary>
         /// Server Start
         /// </summary>
-        private void StartButton_Click(object sender, EventArgs e)
+        private void StartButton_Click(object sender, EventArgs args)
         // Event handler for when the Start/Stop button is pressed
         {
+            if (worldCombobox.SelectedIndex == 0)
+            {
+                ConsoleWriter("Please select a world before starting the server!");
+                return;
+            }
             if (this.running)
             {
                 this.startButton.Text = "Start";
@@ -166,10 +233,10 @@ namespace MinecraftServerCSharp.Server_tab
         {
             try
             {
-                string[] directories = Directory.GetDirectories(worldsDir);
                 this.worldCombobox.Items.Clear();
                 this.worldCombobox.Items.Add("<New>");
-                init = true;
+                this.worldCombobox.SelectedIndex = 0;
+                string[] directories = Directory.GetDirectories(worldsDir);
                 for (int i = 0; i < directories.Length; i++)
                 {
                     string[] dir_list = directories[i].Split("\\");
@@ -180,30 +247,35 @@ namespace MinecraftServerCSharp.Server_tab
                     }
                     this.worldCombobox.Items.Add(dir);
                 }
-                this.worldCombobox.SelectedIndex = 0;
             } catch (DirectoryNotFoundException e)
             {
                 ConsoleWriter("Please create a world and run a server to initialize certain files.");
             } 
         }
 
-       private void ComboBoxChange(object sender, EventArgs args)
+       private void worldComboBoxChange(object sender, EventArgs args)
        {
-            if (init)
-            {
-                init = false;
-                return;
-            }
             string world = worldCombobox.SelectedItem.ToString();
+
             if (world == "<New>")
             {
                 this.NewWorld();
                 return;
             }
             // TODO:: Copy server.properties
-            string wsp = projectDirectory + "\\Server\\worlds\\";
+            string oldWorld = serverProperties["level-name"].Item1.Split('/')[1];
+            string owsp = worldsDir + oldWorld + "\\server.properties";
+            string wsp = worldsDir + world + "\\server.properties";
             string sp = projectDirectory + "\\Server\\server.properties";
-            try { File.Copy(wsp, sp); } 
+            try {
+                if (File.Exists(owsp))
+                {
+                    writeConfig(oldWorld);
+                }
+                backupServer();
+                File.Copy(wsp, sp, true);
+                InitWorldInfo();
+            }
             catch { 
                 ConsoleWriter("Failed to copy server.properties");
                 setServerControlsEnabled(false);
@@ -212,7 +284,13 @@ namespace MinecraftServerCSharp.Server_tab
         }
         private void DeleteWorldClick(object sender, EventArgs args)
         {
+            /// Deletes the world selected by the Wolr
             int currentIndex = worldCombobox.SelectedIndex;
+            if (currentIndex == 0)
+            {
+                ConsoleWriter("Select a world to delete first!");
+                return;
+            }
             string world = worldCombobox.Text;
             string worldPath = worldsDir + world;
             string msg = "Are you sure you want to delete the save data of " + world + 
@@ -228,13 +306,18 @@ namespace MinecraftServerCSharp.Server_tab
                     worldCombobox.Items.Remove(worldCombobox.Items[currentIndex]);
                     worldCombobox.SelectedIndex = 0;
                     setServerControlsEnabled(false);
-                    writeConfig();
+                    writeConfig(worldCombobox.Text);
                 }
                 catch (Exception e)
                 {
                     var ex = e.Data;
                 }
             }
+        }
+        private void backupServer()
+        {
+            //TODO
+            return;
         }
         //
         // New World Form Window
@@ -261,6 +344,7 @@ namespace MinecraftServerCSharp.Server_tab
             this.serverTab.Enabled = true;
             this.newWorldOpen = false;
             this.InitWorldCombobox();
+            InitWorldInfo();
         }
         //
         // Server Commands
@@ -296,6 +380,11 @@ namespace MinecraftServerCSharp.Server_tab
             {
                 newWorldForm.Close();
             }
+        }
+
+        private void serverIpTextChanged(object sender, EventArgs e)
+        {
+            serverProperties["server-ip"] = (serverIpTextbox.Text, serverProperties["server-ip"].Item2);
         }
     }
 

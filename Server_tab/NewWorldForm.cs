@@ -13,6 +13,13 @@ namespace MinecraftServerCSharp.Server_tab
         private int name;
         private int rp;
         private int rp_enable;
+        private Dictionary<string, string> difficultyDict = new Dictionary<string, string>()
+        {
+            {"Peaceful", "peaceful" },
+            {"Easy", "easy" },
+            {"Normal", "normal" },
+            {"Hard", "hard" },
+        };
         public NewWorldForm(String pd, string[] worlds)
         {
             this.world_names = worlds;
@@ -92,14 +99,13 @@ namespace MinecraftServerCSharp.Server_tab
         //
         private void difficultyCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cfg[difficulty] = "difficulty=" + this.difficultyCombobox.Text;
+            cfg[difficulty] = "difficulty=" + difficultyDict[difficultyCombobox.Text];
         }
         private void initDifficultyCombobox()
         {
-            string[] diff = {"easy", "medium", "hard", "peaceful"};
-            foreach (string d in diff)
+            foreach (KeyValuePair<string, string> kvp in difficultyDict)
             {
-                this.difficultyCombobox.Items.Add(d);
+                this.difficultyCombobox.Items.Add(kvp.Key);
             }
             difficultyCombobox.SelectedIndex = 2;
         }
