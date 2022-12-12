@@ -80,7 +80,7 @@ namespace MinecraftServerCSharp.Server_tab
                 response.Close();
                 return return_val;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

@@ -47,6 +47,9 @@
             this.difficultyPanel = new System.Windows.Forms.Panel();
             this.difficultyComboBox = new System.Windows.Forms.ComboBox();
             this.difficultyLabel = new System.Windows.Forms.Label();
+            this.spawnProtectionPanel = new System.Windows.Forms.Panel();
+            this.spawnProtectionTextBox = new System.Windows.Forms.TextBox();
+            this.spawnProtectionLabel = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.playerIdleTextBox = new System.Windows.Forms.TextBox();
             this.playerIdleLabel = new System.Windows.Forms.Label();
@@ -68,6 +71,7 @@
             this.checkBoxPanel2.SuspendLayout();
             this.checkBoxPanel.SuspendLayout();
             this.difficultyPanel.SuspendLayout();
+            this.spawnProtectionPanel.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -172,6 +176,7 @@
             this.worldInfoPanel.Controls.Add(this.checkBoxPanel2);
             this.worldInfoPanel.Controls.Add(this.checkBoxPanel);
             this.worldInfoPanel.Controls.Add(this.difficultyPanel);
+            this.worldInfoPanel.Controls.Add(this.spawnProtectionPanel);
             this.worldInfoPanel.Controls.Add(this.panel5);
             this.worldInfoPanel.Controls.Add(this.panel4);
             this.worldInfoPanel.Controls.Add(this.panel2);
@@ -186,9 +191,9 @@
             // motdTextBox
             // 
             this.motdTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.motdTextBox.Location = new System.Drawing.Point(0, 235);
+            this.motdTextBox.Location = new System.Drawing.Point(0, 265);
             this.motdTextBox.Name = "motdTextBox";
-            this.motdTextBox.Size = new System.Drawing.Size(205, 388);
+            this.motdTextBox.Size = new System.Drawing.Size(205, 358);
             this.motdTextBox.TabIndex = 6;
             this.motdTextBox.Text = "";
             // 
@@ -197,7 +202,7 @@
             this.motdLabel.AutoSize = true;
             this.motdLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.motdLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-            this.motdLabel.Location = new System.Drawing.Point(0, 210);
+            this.motdLabel.Location = new System.Drawing.Point(0, 240);
             this.motdLabel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.motdLabel.Name = "motdLabel";
             this.motdLabel.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
@@ -211,7 +216,7 @@
             this.checkBoxPanel2.Controls.Add(this.resourcePackCheckBox);
             this.checkBoxPanel2.Controls.Add(this.whitelistCheckBox);
             this.checkBoxPanel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBoxPanel2.Location = new System.Drawing.Point(0, 180);
+            this.checkBoxPanel2.Location = new System.Drawing.Point(0, 210);
             this.checkBoxPanel2.MinimumSize = new System.Drawing.Size(200, 30);
             this.checkBoxPanel2.Name = "checkBoxPanel2";
             this.checkBoxPanel2.Size = new System.Drawing.Size(205, 30);
@@ -245,7 +250,7 @@
             this.checkBoxPanel.Controls.Add(this.onlineMode);
             this.checkBoxPanel.Controls.Add(this.pvpCheckBox);
             this.checkBoxPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBoxPanel.Location = new System.Drawing.Point(0, 150);
+            this.checkBoxPanel.Location = new System.Drawing.Point(0, 180);
             this.checkBoxPanel.MinimumSize = new System.Drawing.Size(200, 30);
             this.checkBoxPanel.Name = "checkBoxPanel";
             this.checkBoxPanel.Size = new System.Drawing.Size(205, 30);
@@ -279,7 +284,7 @@
             this.difficultyPanel.Controls.Add(this.difficultyComboBox);
             this.difficultyPanel.Controls.Add(this.difficultyLabel);
             this.difficultyPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.difficultyPanel.Location = new System.Drawing.Point(0, 120);
+            this.difficultyPanel.Location = new System.Drawing.Point(0, 150);
             this.difficultyPanel.MinimumSize = new System.Drawing.Size(0, 30);
             this.difficultyPanel.Name = "difficultyPanel";
             this.difficultyPanel.Size = new System.Drawing.Size(205, 30);
@@ -312,6 +317,39 @@
             this.difficultyLabel.TabIndex = 0;
             this.difficultyLabel.Text = "Difficulty";
             // 
+            // spawnProtectionPanel
+            // 
+            this.spawnProtectionPanel.AutoSize = true;
+            this.spawnProtectionPanel.Controls.Add(this.spawnProtectionTextBox);
+            this.spawnProtectionPanel.Controls.Add(this.spawnProtectionLabel);
+            this.spawnProtectionPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.spawnProtectionPanel.Location = new System.Drawing.Point(0, 120);
+            this.spawnProtectionPanel.MinimumSize = new System.Drawing.Size(0, 30);
+            this.spawnProtectionPanel.Name = "spawnProtectionPanel";
+            this.spawnProtectionPanel.Size = new System.Drawing.Size(205, 30);
+            this.spawnProtectionPanel.TabIndex = 9;
+            // 
+            // spawnProtectionTextBox
+            // 
+            this.spawnProtectionTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.spawnProtectionTextBox.Location = new System.Drawing.Point(150, 0);
+            this.spawnProtectionTextBox.Name = "spawnProtectionTextBox";
+            this.spawnProtectionTextBox.Size = new System.Drawing.Size(55, 23);
+            this.spawnProtectionTextBox.TabIndex = 1;
+            this.spawnProtectionTextBox.Leave += new System.EventHandler(this.worldInfoTextBoxChanged);
+            // 
+            // spawnProtectionLabel
+            // 
+            this.spawnProtectionLabel.AutoSize = true;
+            this.spawnProtectionLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.spawnProtectionLabel.Location = new System.Drawing.Point(0, 0);
+            this.spawnProtectionLabel.MinimumSize = new System.Drawing.Size(150, 23);
+            this.spawnProtectionLabel.Name = "spawnProtectionLabel";
+            this.spawnProtectionLabel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.spawnProtectionLabel.Size = new System.Drawing.Size(150, 23);
+            this.spawnProtectionLabel.TabIndex = 0;
+            this.spawnProtectionLabel.Text = "Max Players:";
+            // 
             // panel5
             // 
             this.panel5.AutoSize = true;
@@ -331,6 +369,7 @@
             this.playerIdleTextBox.Name = "playerIdleTextBox";
             this.playerIdleTextBox.Size = new System.Drawing.Size(55, 23);
             this.playerIdleTextBox.TabIndex = 1;
+            this.playerIdleTextBox.Leave += new System.EventHandler(this.worldInfoTextBoxChanged);
             // 
             // playerIdleLabel
             // 
@@ -363,6 +402,7 @@
             this.maxPlayersTextBox.Name = "maxPlayersTextBox";
             this.maxPlayersTextBox.Size = new System.Drawing.Size(55, 23);
             this.maxPlayersTextBox.TabIndex = 1;
+            this.maxPlayersTextBox.Leave += new System.EventHandler(this.worldInfoTextBoxChanged);
             // 
             // maxPlayersLabel
             // 
@@ -395,6 +435,7 @@
             this.serverPortTextBox.Name = "serverPortTextBox";
             this.serverPortTextBox.Size = new System.Drawing.Size(80, 23);
             this.serverPortTextBox.TabIndex = 1;
+            this.serverPortTextBox.Leave += new System.EventHandler(this.worldInfoTextBoxChanged);
             // 
             // serverPortLabel
             // 
@@ -427,8 +468,7 @@
             this.serverIpTextbox.Name = "serverIpTextbox";
             this.serverIpTextbox.Size = new System.Drawing.Size(150, 23);
             this.serverIpTextbox.TabIndex = 1;
-            this.serverIpTextbox.TextChanged += new System.EventHandler(this.serverIpTextChanged);
-            this.serverIpTextbox.Leave += new System.EventHandler(this.wolrdInfoTextChange);
+            this.serverIpTextbox.Leave += new System.EventHandler(this.worldInfoTextBoxChanged);
             // 
             // serverIpLabel
             // 
@@ -499,6 +539,8 @@
             this.checkBoxPanel.PerformLayout();
             this.difficultyPanel.ResumeLayout(false);
             this.difficultyPanel.PerformLayout();
+            this.spawnProtectionPanel.ResumeLayout(false);
+            this.spawnProtectionPanel.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -552,5 +594,8 @@
         private Panel checkBoxPanel;
         private CheckBox onlineMode;
         private CheckBox pvpCheckBox;
+        private Panel spawnProtectionPanel;
+        private TextBox spawnProtectionTextBox;
+        private Label spawnProtectionLabel;
     }
 }

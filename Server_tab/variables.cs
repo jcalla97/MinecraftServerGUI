@@ -41,6 +41,6 @@ namespace MinecraftServerCSharp.Server_tab
         };
         public static Dictionary<string, CheckBox> checkboxConfigsItems;
         public static Dictionary<string, ComboBox> dropDownConfigItems;
-        public static Dictionary<string, TextBox> textBoxConfigItems; 
+        public static Dictionary<string, (TextBox, string)> textBoxConfigItems; 
     }
 }

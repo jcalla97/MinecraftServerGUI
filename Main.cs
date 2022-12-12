@@ -20,8 +20,6 @@ namespace MinecraftServerCSharp
             InitializeComponent();
 
             // Instantiate Controllers
-            string @namespace = "MinecraftServerCSharp";
-            string @class = "Controller";
             string[] directories = Directory.GetDirectories(workingDirectory);
 
             foreach (string dir in directories)

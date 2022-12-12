@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MinecraftServerCSharp.common;
 using System.Timers;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace MinecraftServerCSharp.Server_tab
 {
@@ -29,19 +30,20 @@ namespace MinecraftServerCSharp.Server_tab
             tab = serverTab;
 
             // Setup Dictionaries
-            textBoxConfigItems = new Dictionary<string, TextBox>() {
-                { "server-ip", serverIpTextbox},
-                { "server-port", serverPortTextBox},
-                { "max-players", maxPlayersTextBox},
-                { "player-idle-timeout", playerIdleTextBox},
-                {"spawn-protection", null},
+            textBoxConfigItems = new Dictionary<string, (TextBox, string)>() {
+                // { server.properties config name, (coresponding textbox, regex pattern) }
+                { "server-ip", (serverIpTextbox, "[1-9a-zA-Z]{1}[0-9A-Za-z]{0,}(.[1-9a-zA-Z]){0,}")},
+                { "server-port", (serverPortTextBox, "[1-9]{1}[0-9]{0,}")},
+                { "max-players", (maxPlayersTextBox, "[1-9]{1}[0-9]{0,}")},
+                { "player-idle-timeout", (playerIdleTextBox, "[1-9]{1}[0-9]{0,}")},
+                { "spawn-protection", (spawnProtectionTextBox, "[1-9]{1}[0-9]{0,}")},
             };
-            checkboxConfigsItems = new Dictionary<string, CheckBox>()
-            {
-                {"require-resource-pack", null},
-                {"pvp", null},
-                {"online-mode", null},
-                {"enfore-whitelist", null},
+            checkboxConfigsItems = new Dictionary<string, CheckBox>() {
+                // { server.properties config name, coresponding checkbox }
+                {"require-resource-pack", resourcePackCheckBox},
+                {"pvp", pvpCheckBox},
+                {"online-mode", onlineMode},
+                {"enfore-whitelist", whitelistCheckBox},
             };
 
             // Setup buttons
@@ -74,9 +76,9 @@ namespace MinecraftServerCSharp.Server_tab
                     serverProperties[split[0]] = (split[1], index);
                     if (textBoxConfigItems.ContainsKey(split[0]))
                     {
-                        if (textBoxConfigItems[split[0]] != null)
+                        if (textBoxConfigItems[split[0]].Item1 != null)
                         {
-                            var textbox = textBoxConfigItems[split[0]];
+                            var textbox = textBoxConfigItems[split[0]].Item1;
                             textbox.Text = split[1];
                         }
                     }
@@ -110,11 +112,6 @@ namespace MinecraftServerCSharp.Server_tab
                 }
                 index++;
             }
-            return;
-        }
-
-        private void wolrdInfoTextChange(object sender, EventArgs e)
-        {
             return;
         }
 
@@ -247,7 +244,7 @@ namespace MinecraftServerCSharp.Server_tab
                     }
                     this.worldCombobox.Items.Add(dir);
                 }
-            } catch (DirectoryNotFoundException e)
+            } catch (DirectoryNotFoundException)
             {
                 ConsoleWriter("Please create a world and run a server to initialize certain files.");
             } 
@@ -381,10 +378,48 @@ namespace MinecraftServerCSharp.Server_tab
                 newWorldForm.Close();
             }
         }
-
-        private void serverIpTextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Functions for World Info Items changed```
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void worldInfoTextBoxChanged(object sender, EventArgs args)
         {
-            serverProperties["server-ip"] = (serverIpTextbox.Text, serverProperties["server-ip"].Item2);
+            foreach (KeyValuePair<string, (TextBox, string)> kvp in textBoxConfigItems) 
+            {
+                if (kvp.Value.Item1 == sender)
+                {
+                    if (worldCombobox.SelectedIndex == 0)
+                    {
+                        ConsoleWriter("Please Select a world before editing the properties!");
+                        kvp.Value.Item1.Text = serverProperties[kvp.Key].Item1;
+                        return;
+                    }
+                    var textbox = kvp.Value.Item1.Text;
+                    if (string.IsNullOrEmpty(textbox))
+                    {
+                        serverProperties[kvp.Key] = ("", serverProperties[kvp.Key].Item2);
+                        break;
+                    }
+                    else if (new Regex(kvp.Value.Item2).IsMatch(textbox))
+                    {
+                        serverProperties[kvp.Key] = (textbox, serverProperties[kvp.Key].Item2);
+                        ConsoleWriter("The " + kvp.Key + " was set to " + textbox);
+                        break;
+                    }
+                    else
+                    {
+                        ConsoleWriter(kvp.Value.Item1.Text + " is not an accepted value for " + kvp.Key);
+                        kvp.Value.Item1.Text = serverProperties[kvp.Key].Item1;
+                        break;
+                    }
+                }
+            }
+            writeConfig(worldCombobox.Text);
+        }
+        private void worldInfoCheckboxChanged(object sender, EventArgs args)
+        {
+            
         }
     }
 

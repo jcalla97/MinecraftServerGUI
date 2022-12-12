@@ -327,7 +327,6 @@
         private TextBox nameTextbox;
         private FlowLayoutPanel flowLayoutPanel3;
         private Label difficultyLabel;
-        private Label seperator;
         private FlowLayoutPanel flowLayoutPanel5;
         private Button verifyButton;
         private FlowLayoutPanel flowLayoutPanel4;
