@@ -226,12 +226,13 @@
             // 
             this.resourcePackCheckBox.AutoSize = true;
             this.resourcePackCheckBox.Dock = System.Windows.Forms.DockStyle.Left;
-            this.resourcePackCheckBox.Location = new System.Drawing.Point(65, 0);
+            this.resourcePackCheckBox.Location = new System.Drawing.Point(72, 0);
             this.resourcePackCheckBox.Name = "resourcePackCheckBox";
             this.resourcePackCheckBox.Size = new System.Drawing.Size(145, 30);
             this.resourcePackCheckBox.TabIndex = 1;
             this.resourcePackCheckBox.Text = "Require Resource Pack";
             this.resourcePackCheckBox.UseVisualStyleBackColor = true;
+            this.resourcePackCheckBox.Click += new System.EventHandler(this.worldInfoCheckboxChanged);
             // 
             // whitelistCheckBox
             // 
@@ -239,10 +240,11 @@
             this.whitelistCheckBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.whitelistCheckBox.Location = new System.Drawing.Point(0, 0);
             this.whitelistCheckBox.Name = "whitelistCheckBox";
-            this.whitelistCheckBox.Size = new System.Drawing.Size(65, 30);
+            this.whitelistCheckBox.Size = new System.Drawing.Size(72, 30);
             this.whitelistCheckBox.TabIndex = 0;
-            this.whitelistCheckBox.Text = "Witelist";
+            this.whitelistCheckBox.Text = "Whitelist";
             this.whitelistCheckBox.UseVisualStyleBackColor = true;
+            this.whitelistCheckBox.Click += new System.EventHandler(this.worldInfoCheckboxChanged);
             // 
             // checkBoxPanel
             // 
@@ -266,6 +268,7 @@
             this.onlineMode.TabIndex = 1;
             this.onlineMode.Text = "Online Mode";
             this.onlineMode.UseVisualStyleBackColor = true;
+            this.onlineMode.Click += new System.EventHandler(this.worldInfoCheckboxChanged);
             // 
             // pvpCheckBox
             // 
@@ -277,6 +280,7 @@
             this.pvpCheckBox.TabIndex = 0;
             this.pvpCheckBox.Text = "Pvp Mode";
             this.pvpCheckBox.UseVisualStyleBackColor = true;
+            this.pvpCheckBox.Click += new System.EventHandler(this.worldInfoCheckboxChanged);
             // 
             // difficultyPanel
             // 
@@ -348,7 +352,7 @@
             this.spawnProtectionLabel.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
             this.spawnProtectionLabel.Size = new System.Drawing.Size(150, 23);
             this.spawnProtectionLabel.TabIndex = 0;
-            this.spawnProtectionLabel.Text = "Max Players:";
+            this.spawnProtectionLabel.Text = "Spawn Protection Bounds:";
             // 
             // panel5
             // 

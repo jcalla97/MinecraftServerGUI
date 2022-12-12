@@ -61,7 +61,7 @@ namespace MinecraftServerCSharp.Server_tab
                 cfg[conf.Value.Item2] = conf.Key + "=" + conf.Value.Item1;
             }
             File.WriteAllLines(cfgPath, cfg);
-            File.Copy(worldsDir + world + "\\server.properties", cfgPath, true);
+            File.Copy(cfgPath, worldsDir + world + "\\server.properties", true);
         }
         private void InitWorldInfo()
         {
@@ -122,6 +122,7 @@ namespace MinecraftServerCSharp.Server_tab
         
         private void difficultyComboBoxChange(object sender, EventArgs args)
         {
+            // TODO::Fix issue with difficulty combobox
             string difficulty = difficultyComboBox.Text;
             serverProperties["difficulty"] = (difficultyDict[difficulty], serverProperties["difficulty"].Item2);
             writeConfig(worldCombobox.Text);
@@ -342,6 +343,7 @@ namespace MinecraftServerCSharp.Server_tab
             this.newWorldOpen = false;
             this.InitWorldCombobox();
             InitWorldInfo();
+            worldCombobox.SelectedIndex = worldCombobox.FindString(serverProperties["level-name"].Item1.Split('/')[1]);
         }
         //
         // Server Commands
@@ -395,16 +397,20 @@ namespace MinecraftServerCSharp.Server_tab
                         kvp.Value.Item1.Text = serverProperties[kvp.Key].Item1;
                         return;
                     }
-                    var textbox = kvp.Value.Item1.Text;
-                    if (string.IsNullOrEmpty(textbox))
+                    var text = kvp.Value.Item1.Text;
+                    if (string.IsNullOrEmpty(text))
                     {
                         serverProperties[kvp.Key] = ("", serverProperties[kvp.Key].Item2);
                         break;
                     }
-                    else if (new Regex(kvp.Value.Item2).IsMatch(textbox))
+                    else if (text == serverProperties[kvp.Key].Item1)
                     {
-                        serverProperties[kvp.Key] = (textbox, serverProperties[kvp.Key].Item2);
-                        ConsoleWriter("The " + kvp.Key + " was set to " + textbox);
+                        return;
+                    }
+                    else if (new Regex(kvp.Value.Item2).IsMatch(text))
+                    {
+                        serverProperties[kvp.Key] = (text, serverProperties[kvp.Key].Item2);
+                        ConsoleWriter("The " + kvp.Key + " was set to " + text);
                         break;
                     }
                     else
@@ -419,7 +425,23 @@ namespace MinecraftServerCSharp.Server_tab
         }
         private void worldInfoCheckboxChanged(object sender, EventArgs args)
         {
-            
+            foreach(var kvp in checkboxConfigsItems)
+            {
+                if (kvp.Value == sender)
+                {
+                    if (worldCombobox.SelectedIndex == 0)
+                    {
+                        ConsoleWriter("Please Select a world before editing the properties!");
+                        kvp.Value.Checked = bool.Parse(serverProperties[kvp.Key].Item1);
+                        return;
+                    }
+                    CheckBox checkbox = kvp.Value;
+                    serverProperties[kvp.Key] = (checkbox.Checked.ToString().ToLower(), serverProperties[kvp.Key].Item2);
+                    ConsoleWriter("The " + kvp.Key + " was set to " + serverProperties[kvp.Key].Item1);
+                    break;
+                }
+            }
+            writeConfig(worldCombobox.Text);
         }
     }
 
