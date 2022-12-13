@@ -18,7 +18,7 @@ namespace MinecraftServerCSharp.Server_tab
         public Dictionary<string, (string, int)> serverProperties = new Dictionary<string, (string, int)>()
         {
             {"difficulty", (string.Empty, 0)},
-            {"enforce-whitelist", (string.Empty, 0)},
+            {"white-list", (string.Empty, 0)},
             {"level-seed", (string.Empty, 0) },
             {"level-name", (string.Empty, 0)},
             {"max-players", (string.Empty, 0)},

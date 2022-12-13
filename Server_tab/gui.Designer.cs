@@ -196,6 +196,7 @@
             this.motdTextBox.Size = new System.Drawing.Size(205, 358);
             this.motdTextBox.TabIndex = 6;
             this.motdTextBox.Text = "";
+            this.motdTextBox.Leave += new System.EventHandler(this.motdTextBoxChange);
             // 
             // motdLabel
             // 

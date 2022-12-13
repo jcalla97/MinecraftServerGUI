@@ -43,7 +43,7 @@ namespace MinecraftServerCSharp.Server_tab
                 {"require-resource-pack", resourcePackCheckBox},
                 {"pvp", pvpCheckBox},
                 {"online-mode", onlineMode},
-                {"enfore-whitelist", whitelistCheckBox},
+                {"white-list", whitelistCheckBox},
             };
 
             // Setup buttons
@@ -122,8 +122,14 @@ namespace MinecraftServerCSharp.Server_tab
         
         private void difficultyComboBoxChange(object sender, EventArgs args)
         {
+            if (worldCombobox.SelectedIndex == 0)
+            {
+                ConsoleWriter("Please select a world before starting the server!");
+                difficultyComboBox.SelectedIndex = difficultyComboBox.FindString(serverProperties["difficulty"].Item1);
+                return;
+            }
             // TODO::Fix issue with difficulty combobox
-            string difficulty = difficultyComboBox.Text;
+            string difficulty = difficultyComboBox.SelectedItem.ToString();
             serverProperties["difficulty"] = (difficultyDict[difficulty], serverProperties["difficulty"].Item2);
             writeConfig(worldCombobox.Text);
             ConsoleWriter("Difficulty set to " + difficulty);
@@ -423,15 +429,14 @@ namespace MinecraftServerCSharp.Server_tab
             }
             writeConfig(worldCombobox.Text);
         }
-        private void worldInfoCheckboxChanged(object sender, EventArgs args)
-        {
+        private void worldInfoCheckboxChanged(object sender, EventArgs args) {
             foreach(var kvp in checkboxConfigsItems)
             {
                 if (kvp.Value == sender)
                 {
                     if (worldCombobox.SelectedIndex == 0)
                     {
-                        ConsoleWriter("Please Select a world before editing the properties!");
+                        ConsoleWriter("Please select a world before editing the properties!");
                         kvp.Value.Checked = bool.Parse(serverProperties[kvp.Key].Item1);
                         return;
                     }
@@ -441,6 +446,16 @@ namespace MinecraftServerCSharp.Server_tab
                     break;
                 }
             }
+            writeConfig(worldCombobox.Text);
+        }
+        private void motdTextBoxChange(object sender, EventArgs args) {
+            if (worldCombobox.SelectedIndex == 0)
+            {
+                ConsoleWriter("Please select a world before editing the properties!");
+                motdTextBox.Text = serverProperties["motd"].Item1;
+                return;
+            }
+            serverProperties["motd"] = (motdTextBox.Text, serverProperties["motd"].Item2);
             writeConfig(worldCombobox.Text);
         }
     }
