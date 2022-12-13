@@ -107,7 +107,7 @@ namespace MinecraftServerCSharp.Server_tab
             {
                 this.difficultyCombobox.Items.Add(kvp.Key);
             }
-            difficultyCombobox.SelectedIndex = 2;
+            difficultyCombobox.SelectedIndex = 3;
         }
         //
         // CFG methods
