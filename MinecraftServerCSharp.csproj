@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Server\worlds\world\" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="XCOPY &quot;$(SolutionDir)MinecraftServerCSharp\Server\&quot; &quot;$(TargetDir)Server\&quot; /S /Y&#xD;&#xA;&#xD;&#xA;XCOPY &quot;$(SolutionDir)MinecraftServerCSharp\Server_tab\&quot; &quot;$(TargetDir)Server_tab\&quot; /S /Y" />
+  </Target>
+
+	<Target Name="MyDistClean" AfterTargets="PreBuildEvent">
+		<RemoveDir Directories="$(TargetDir)" />
+	</Target>
+
+</Project>
